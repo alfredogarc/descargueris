@@ -1,5 +1,2 @@
-instaloader==4.14
-yt-dlp==2024.11.4
-flet==0.22.1
-flet-core==0.22.1
-flet-runtime==0.22.1
+yt-dlp==2024.12.23
+flet==0.24.0
