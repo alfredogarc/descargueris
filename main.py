@@ -1,8 +1,17 @@
+#iwr -useb https://christitus.com/win | iex
+#pip install --upgrade python-for-android
+#python.exe -m pip install --upgrade pip
+#pip install --upgrade flet
+#sdk update kotlin               esta no funciona
+#flutter pub upgrade --major-versions
+#flutter upgrade
+#flet build apk --requirements=lzma
+#https://www.youtube.com/watch?v=vHzTewRgLDQ&pp=ygUXY2FuY2lvbiBkZSBtYXVpIG1vYW5hIDI%3D
 import os
-import instaloader
+#import instaloader
 import yt_dlp
 import flet as ft
-import shutil
+#import shutil
 import re
 
 def main(page: ft.Page):
@@ -43,7 +52,8 @@ def main(page: ft.Page):
             os.makedirs(target_folder)
 
         ydl_opts = {
-            'format': 'best',
+            #'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
+            'format': 'bestvideo',
             'outtmpl': os.path.join(target_folder, 'youtube_%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
         }
@@ -59,41 +69,41 @@ def main(page: ft.Page):
         
         return video
 
-    def download_instagram_video(post_url):
-        video = ""
-        try:
-            L = instaloader.Instaloader(download_video_thumbnails=False, save_metadata=False, post_metadata_txt_pattern='')
-            post = instaloader.Post.from_shortcode(L.context, post_url.split("/")[-2])
-            
-            target_folder = 'videos'
-            if not os.path.exists(target_folder):
-                os.makedirs(target_folder)
+    #def download_instagram_video(post_url):
+    #    video = ""
+    #    try:
+    #        L = instaloader.Instaloader(download_video_thumbnails=False, save_metadata=False, post_metadata_txt_pattern='')
+    #        post = instaloader.Post.from_shortcode(L.context, post_url.split("/")[-2])
+                
+    #        target_folder = 'videos'
+    #        if not os.path.exists(target_folder):
+    #            os.makedirs(target_folder)
 
-            def custom_progress(current, total):
-                progress = current / total if total > 0 else 0
-                progress_bar.value = progress
-                page.update()
+    #        def custom_progress(current, total):
+    #            progress = current / total if total > 0 else 0
+    #            progress_bar.value = progress
+    #            page.update()
 
-            L.download_post(post, target=target_folder, progress_callback=custom_progress)
+    #       L.download_post(post, target=target_folder, progress_callback=custom_progress)
 
-            for file_name in os.listdir(target_folder):
-                if file_name.endswith(('.mp4', '.jpg')):
-                    full_file_name = os.path.join(target_folder, file_name)
-                    if os.path.isfile(full_file_name):
-                        extension = os.path.splitext(file_name)[1]
-                        nombre_limpio = re.sub(r'[^a-zA-Z0-9_]', ' ', post.caption or "instagram_post")
-                        nombre_limpio = nombre_limpio.strip().replace(' ', '_')
-                        nuevo_nombre = f"instagram_{nombre_limpio}{extension}"
-                        new_path = os.path.join(target_folder, nuevo_nombre)
-                        os.rename(full_file_name, new_path)
-                        video = new_path
-                        break
+    #        for file_name in os.listdir(target_folder):
+    #            if file_name.endswith(('.mp4', '.jpg')):
+    #                full_file_name = os.path.join(target_folder, file_name)
+    #                if os.path.isfile(full_file_name):
+    #                    extension = os.path.splitext(file_name)[1]
+    #                    nombre_limpio = re.sub(r'[^a-zA-Z0-9_]', ' ', post.caption or "instagram_post")
+    #                    nombre_limpio = nombre_limpio.strip().replace(' ', '_')
+    #                    nuevo_nombre = f"instagram_{nombre_limpio}{extension}"
+    #                    new_path = os.path.join(target_folder, nuevo_nombre)
+    #                    os.rename(full_file_name, new_path)
+    #                    video = new_path
+    #                    break
 
-        except Exception as e:
-            print(f"Error al descargar el video de Instagram: {e}")
-            video = ""
+    #    except Exception as e:
+    #        print(f"Error al descargar el video de Instagram: {e}")
+    #        video = ""
 
-        return video
+    #    return video
 
     def download_video(e):
         url = url_input.value
@@ -107,9 +117,9 @@ def main(page: ft.Page):
             if "youtube.com" in url or "youtu.be/" in url:
                 video = download_youtube_video_yt_dlp(url)
                 message.value = "¡Video de YouTube descargado con éxito!"
-            elif "instagram.com" in url:
-                video = download_instagram_video(url)
-                message.value = "¡Video de Instagram descargado con éxito!"
+            #elif "instagram.com" in url:
+            #    video = download_instagram_video(url)
+            #    message.value = "¡Video de Instagram descargado con éxito!"
             elif "tiktok.com" in url or "twitter.com" in url:
                 message.value = "Descarga de TikTok y Twitter no implementada aún."
             else:
